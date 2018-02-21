@@ -27,7 +27,6 @@ class APIClient {
         performRequest(path: path, method: .patch, params: params, completion: completion)
     }
     
-    
     // MARK: - Private Functions
     
     private static func performRequest(path: String, method: HTTPMethod, params: [String: Any]?, completion: @escaping (_ json: Any?) -> Void) {
@@ -56,7 +55,7 @@ class APIClient {
     }
     
     private static func stagingUrl() -> String {
-        return "http://192.168.100.18:4024/"
+        return "http://172.20.10.2:4022/"
     }
     
 }

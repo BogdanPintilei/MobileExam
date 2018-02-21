@@ -14,23 +14,23 @@ class Object: NSObject, NSCoding {
     var name: String?
     var model: String?
     var status: String?
-    var km: Int?
-    var year: Int?
+    var seats: Int?
+    var rides: Int?
 
     init(
         id: Int? = 0,
         name: String? = "",
         model: String? = "",
         status: String? = "",
-        year: Int? = 0,
-        km: Int? = 0
+        seats: Int? = 0,
+        rides: Int? = 0
     ) {
         self.id = id
         self.name = name
         self.model = model
         self.status = status
-        self.year = year
-        self.km = km
+        self.seats = seats
+        self.rides = rides
     }
 
 
@@ -39,8 +39,8 @@ class Object: NSObject, NSCoding {
         self.name = decoder.decodeObject(forKey: "name") as? String
         self.model = decoder.decodeObject(forKey: "model") as? String
         self.status = decoder.decodeObject(forKey: "status") as? String
-        self.year = decoder.decodeObject(forKey: "year") as? Int
-        self.km = decoder.decodeObject(forKey: "km") as? Int
+        self.seats = decoder.decodeObject(forKey: "seats") as? Int
+        self.rides = decoder.decodeObject(forKey: "rides") as? Int
     }
     
     func encode(with aCoder: NSCoder) {
@@ -48,8 +48,8 @@ class Object: NSObject, NSCoding {
         aCoder.encode(self.name, forKey: "name")
         aCoder.encode(self.model, forKey: "model")
         aCoder.encode(self.status, forKey: "status")
-        aCoder.encode(self.year, forKey: "year")
-        aCoder.encode(self.km, forKey: "km")
+        aCoder.encode(self.seats, forKey: "seats")
+        aCoder.encode(self.rides, forKey: "rides")
         
     }
 }

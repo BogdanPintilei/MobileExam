@@ -45,7 +45,7 @@ class Helper {
     }
     
     static func sortObjects(objects: [Object]) -> [Object]  {
-        let sortObjects = objects.sorted { $0.km! < $1.km!}
+        let sortObjects = objects.sorted { $0.seats! > $1.seats!}
         print("The sorted list is : \(sortObjects)")
         return sortObjects
     }

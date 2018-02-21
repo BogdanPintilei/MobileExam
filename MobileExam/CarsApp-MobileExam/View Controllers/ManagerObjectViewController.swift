@@ -64,7 +64,7 @@ class ManagerObjectViewController: UIViewController {
     }
 
     private func showDeleteDialogue() {
-        let alert = UIAlertController(title: "Delete Car", message: "Which Car do you want to delete?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Delete Car", message: "Which Boat do you want to delete?", preferredStyle: .alert)
 
         alert.addTextField { (textField) in
             textField.placeholder = "ID"

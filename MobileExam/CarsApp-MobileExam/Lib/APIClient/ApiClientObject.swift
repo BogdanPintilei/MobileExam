@@ -11,25 +11,25 @@ import Foundation
 extension APIClient {
 
     class func getObjects(completion: @escaping (_ levels: [Object]) -> Void) {
-        let path = "cars"
+        let path = "boats"
         get(path: path) { json in
             if (json as? [[String: AnyObject]]) != nil {
-                let cars = Factory.objectsFromJsonArray(jsonArray: json as! [[String: AnyObject]])
-                Object.insertItems(objectList: cars)
-                completion(cars)
+                let boats = Factory.objectsFromJsonArray(jsonArray: json as! [[String: AnyObject]])
+                Object.insertItems(objectList: boats)
+                completion(boats)
             } else {
-                var cars = [Object]()
+                var boats = [Object]()
                 if Object.retrieveItems().count != 0 && ConnectivityManager.shared().isConnectedToInternet() == false {
-                    cars = Object.retrieveItems()
+                    boats = Object.retrieveItems()
                 }
-                completion(cars)
+                completion(boats)
             }
 
         }
     }
 
     class func editObject(object: Object, completion: @escaping (_ success: Bool) -> Void) {
-        let path = "modify"
+        let path = "change"
         let params = objectParams(object)
         post(path: path, params: params) { json in
             if json != nil {
@@ -41,7 +41,7 @@ extension APIClient {
     }
 
     class func editObjectAttribute(object: Object, completion: @escaping (_ success: Bool) -> Void) {
-        let path = "km"
+        let path = "rides"
         let params = objectParamsForAttribute(object)
         post(path: path, params: params) { json in
             if json != nil {
@@ -53,7 +53,7 @@ extension APIClient {
     }
 
     class func addObject(object: Object, completion: @escaping (_ success: Bool) -> Void) {
-        let path = "add"
+        let path = "new"
         let params = objectParamsForAdd(object)
         post(path: path, params: params) { json in
             if json != nil {
@@ -65,7 +65,7 @@ extension APIClient {
     }
 
     class func deleteObject(id: Int, completion: @escaping (_ success: Bool) -> Void) {
-        let path = "car/\(id)"
+        let path = "boat/\(id)"
         var params = [String: Any]()
         params["id"] = id
         delete(path: path, params: params) { succes in
@@ -94,8 +94,8 @@ extension APIClient {
             params["status"] = status
         }
 
-        if let year = object.year {
-            params["year"] = year
+        if let year = object.seats {
+            params["seats"] = year
         }
 
         print(params)
@@ -109,11 +109,11 @@ extension APIClient {
             params["id"] = id
         }
 
-        if let km = object.km {
-            params["km"] = km
+        if let km = object.rides {
+            params["rides"] = km
         }
 
-        print(params)
+        print("Edit the number of rides: \(params)")
         return params
     }
 
@@ -128,8 +128,8 @@ extension APIClient {
             params["model"] = model
         }
 
-        if let year = object.year {
-            params["year"] = year
+        if let year = object.seats {
+            params["seats"] = year
         }
 
         print(params)

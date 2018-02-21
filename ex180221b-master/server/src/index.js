@@ -23,79 +23,85 @@ const getRandomInt = (min, max) => {
     return Math.floor(Math.random() * (max - min)) + min;
 };
 
-const carNames = ['John', 'Grand', 'Small', 'Big', 'Huge', 'Bad'];
-const carModels = ['Audi', 'Bmw', 'Skoda', 'Seat', 'Tesla', 'Toyota'];
-const statusTypes = ['old', 'new'];
-const cars = [];
+const boatNames = ['Yellow', 'Blue', 'Small', 'Big', 'Lincoln'];
+const boatModels = ['Serenity', 'Orion', 'Whisper'];
+const statusTypes = ['free', 'busy'];
+const boats = [];
 for (let i = 0; i < 10; i++) {
-    cars.push({
+    boats.push({
         id: i + 1,
-        name: carNames[getRandomInt(0, carNames.length - 1)],
-        model: carModels[getRandomInt(0, carModels.length - 1)],
-        status: statusTypes[1],
-        year: getRandomInt(1990, 2018),
-        km: getRandomInt(1, 3000)
+        name: boatNames[getRandomInt(0, boatNames.length)],
+        model: boatModels[getRandomInt(0, boatModels.length )],
+        status: statusTypes[getRandomInt(0, statusTypes.length )],
+        seats: getRandomInt(1, 10),
+        rides: getRandomInt(1, 1000)
     });
 }
 
 const router = new Router();
-router.get('/cars', ctx => {
-    ctx.response.body = cars;
+router.get('/boats', ctx => {
+    ctx.response.body = boats.filter(boat => boat.status == statusTypes[0]);
     ctx.response.status = 200;
 });
 
-router.post('/modify', ctx => {
+router.get('/busy', ctx => {
+    ctx.response.body = boats.filter(boat => boat.status == statusTypes[1]);
+    ctx.response.status = 200;
+});
+
+
+router.post('/change', ctx => {
     // console.log("ctx: " + JSON.stringify(ctx));
     const headers = ctx.request.body;
     console.log("body: " + JSON.stringify(headers));
     const id = headers.id;
     const name = headers.name;
     const status = headers.status;
-    const year = headers.year;
+    const seats = headers.seats;
     if (typeof id !== 'undefined' && typeof name !== 'undefined' &&
-        typeof status !== 'undefined' && typeof year !== 'undefined') {
-        const index = cars.findIndex(car => car.id == id);
+        typeof status !== 'undefined' && typeof seats !== 'undefined') {
+        const index = boats.findIndex(boat => boat.id == id);
         if (index === -1) {
-            console.log("Car not available!");
-            ctx.response.body = {text: 'Car not available!'};
+            console.log("Boat not available!");
+            ctx.response.body = {text: 'Boat not available!'};
             ctx.response.status = 404;
         } else {
-            let car = cars[index];
-            car.name = name;
-            car.status = status;
-            car.year = year;
-            ctx.response.body = car;
+            let boat = boats[index];
+            boat.name = name;
+            boat.status = status;
+            boat.seats = seats;
+            ctx.response.body = boat;
             ctx.response.status = 200;
         }
     } else {
-        console.log("Missing or invalid: id or name or status or year!");
-        ctx.response.body = {text: 'Missing or invalid: id or name or status or year!'};
+        console.log("Missing or invalid: id or name or status or seats!");
+        ctx.response.body = {text: 'Missing or invalid: id or name or status or seats!'};
         ctx.response.status = 404;
     }
 });
 
 
-router.post('/km', ctx => {
+router.post('/rides', ctx => {
     // console.log("ctx: " + JSON.stringify(ctx));
     const headers = ctx.request.body;
     console.log("body: " + JSON.stringify(headers));
     const id = headers.id;
-    const km = headers.km;
-    if (typeof id !== 'undefined' && typeof km !== 'undefined') {
-        const index = cars.findIndex(plane => plane.id == id);
+    const rides = headers.rides;
+    if (typeof id !== 'undefined' && typeof rides !== 'undefined') {
+        const index = boats.findIndex(boat => boat.id == id);
         if (index === -1) {
-            console.log("Car not available!");
-            ctx.response.body = {text: 'Car not available!'};
+            console.log("Boat not available!");
+            ctx.response.body = {text: 'Boat not available!'};
             ctx.response.status = 404;
         } else {
-            let car = cars[index];
-            car.km = km;
-            ctx.response.body = car;
+            let boat = boats[index];
+            boat.rides = boat.rides + rides;
+            ctx.response.body = boat;
             ctx.response.status = 200;
         }
     } else {
-        console.log("Missing or invalid: id or name or status or year!");
-        ctx.response.body = {text: 'Missing or invalid: id or name or status or year!'};
+        console.log("Missing or invalid: id or rides!");
+        ctx.response.body = {text: 'Missing or invalid: id or rides!'};
         ctx.response.status = 404;
     }
 });
@@ -107,60 +113,60 @@ const broadcast = (data) =>
         }
     });
 
-router.post('/add', ctx => {
+router.post('/new', ctx => {
     // console.log("ctx: " + JSON.stringify(ctx));
     const headers = ctx.request.body;
     console.log("body: " + JSON.stringify(headers));
     const name = headers.name;
     const model = headers.model;
-    const year = headers.year;
+    const seats = headers.seats;
     if (typeof name !== 'undefined' && typeof model !== 'undefined' &&
-        typeof year !== 'undefined') {
-        const index = cars.findIndex(car => car.name == name &&
-        car.model == model && car.year == year);
+        typeof seats !== 'undefined') {
+        const index = boats.findIndex(boat => boat.name == name &&
+        boat.model == model && boat.seats == seats);
         if (index !== -1) {
-            console.log("Car already exists!");
-            ctx.response.body = {text: 'Car already exists!'};
+            console.log("Boat already exists!");
+            ctx.response.body = {text: 'Boat already exists!'};
             ctx.response.status = 404;
         } else {
-            let maxId = Math.max.apply(Math, cars.map(function (car) {
-                    return car.id;
+            let maxId = Math.max.apply(Math, boats.map(function (boat) {
+                    return boat.id;
                 })) + 1;
-            let car = {
+            let boat = {
                 id: maxId,
                 name,
                 model,
-                status: statusTypes[2],
-                year,
+                status: statusTypes[0],
+                seats,
                 km: 0
             };
-            cars.push(car);
-            broadcast(car);
-            ctx.response.body = car;
+            boats.push(boat);
+            broadcast(boat);
+            ctx.response.body = boat;
             ctx.response.status = 200;
         }
     } else {
-        console.log("Missing or invalid: name or manufacturer or year!");
-        ctx.response.body = {text: 'Missing or invalid: name or manufacturer or year!"'};
+        console.log("Missing or invalid: name or model or rides!");
+        ctx.response.body = {text: 'Missing or invalid: name or model or rides!"'};
         ctx.response.status = 404;
     }
 });
 
-router.del('/car/:id', ctx => {
+router.del('/boat/:id', ctx => {
     // console.log("ctx: " + JSON.stringify(ctx));
     const headers = ctx.params;
     console.log("body: " + JSON.stringify(headers));
     const id = headers.id;
     if (typeof id !== 'undefined') {
-        const index = cars.findIndex(car => car.id == id);
+        const index = boats.findIndex(boat => boat.id == id);
         if (index === -1) {
-            console.log("No car with id: " + id);
-            ctx.response.body = {text: 'Invalid car id'};
+            console.log("No boat with id: " + id);
+            ctx.response.body = {text: 'Invalid boat id'};
             ctx.response.status = 404;
         } else {
-            let car = cars[index];
-            cars.splice(index, 1);
-            ctx.response.body = car;
+            let boat = boats[index];
+            boats.splice(index, 1);
+            ctx.response.body = boat;
             ctx.response.status = 200;
         }
     } else {
@@ -172,4 +178,4 @@ router.del('/car/:id', ctx => {
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-server.listen(4024);
+server.listen(4022);

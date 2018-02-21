@@ -31,7 +31,7 @@ class AddObjectTableViewController: UITableViewController {
         let object = Object(
             name: nameTextField.text,
             model: modelTextField.text,
-            year: Int(yearTextField.text!)
+            seats: Int(yearTextField.text!)
         )
         LoadingView.startLoadingAnimation()
         APIClient.addObject(object: object) { succes in

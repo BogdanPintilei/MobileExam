@@ -36,8 +36,8 @@ class ManagerObjectDetailsTableTableViewController: UITableViewController {
         nameTextField.text = object.name!
         modelTextField.text = object.model!
         statusTextField.text = object.status!
-        yearTextField.text = "\(object.year!)"
-        kmTextField.text = "\(object.km!)"
+        yearTextField.text = "\(object.seats!)"
+        kmTextField.text = "\(object.rides!)"
     }
     
     

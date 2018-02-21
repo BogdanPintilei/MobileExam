@@ -21,7 +21,7 @@ class ObjectDetailsEditTableTableViewController: UITableViewController {
     @IBOutlet var cancelButton: UIBarButtonItem!
 
     var object = Object()
-    var totalKm = Int(0)
+    var totalRides = Int(0)
     var shouldChangeEditButtonToSave: Bool?
 
     override func viewDidLoad() {
@@ -54,18 +54,19 @@ class ObjectDetailsEditTableTableViewController: UITableViewController {
     }
 
     @IBAction func editKm(_ sender: Any) {
-        let alert = UIAlertController(title: "KM", message: "How many km would you like to add?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "KM", message: "How many rides you like to add?", preferredStyle: .alert)
 
         alert.addTextField { (textField) in
-            textField.placeholder = "km"
+            textField.placeholder = "rides"
             textField.keyboardType = .numberPad
         }
-        totalKm = object.km!
+        totalRides = object.rides!
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
             let textField = alert?.textFields![0]
             if !(textField?.text?.isEmpty)! {
                 if Int((textField?.text)!)! > 0 {
-                    self.totalKm = self.totalKm + Int((textField?.text!)!)!
+                    self.totalRides = self.totalRides + Int((textField?.text!)!)!
+                    print("the total number of rides is: \(self.totalRides)")
                 }
                 self.saveEditedKm()
             }
@@ -80,15 +81,15 @@ class ObjectDetailsEditTableTableViewController: UITableViewController {
             name: nameTextField.text,
             model: object.model,
             status: statusTextField.text,
-            year: Int(yearTextField.text!),
-            km: totalKm
+            seats: Int(yearTextField.text!),
+            rides: totalRides
         )
-        object.km = totalKm
+        object.rides = totalRides
         LoadingView.startLoadingAnimation()
         APIClient.editObjectAttribute(object: editedObject) { succes in
             LoadingView.stopLoadingAnimation()
             if succes {
-                self.kmTextField.text = String(self.totalKm)
+                self.kmTextField.text = String(self.totalRides)
                 print("POST /modify 200")
             } else {
                 print("POST /modify 404")
@@ -102,8 +103,8 @@ class ObjectDetailsEditTableTableViewController: UITableViewController {
             name: nameTextField.text,
             model: object.model,
             status: statusTextField.text,
-            year: Int(yearTextField.text!),
-            km: object.km!
+            seats: Int(yearTextField.text!),
+            rides: object.rides!
         )
 
         LoadingView.startLoadingAnimation()
@@ -126,8 +127,8 @@ class ObjectDetailsEditTableTableViewController: UITableViewController {
         nameTextField.text = object.name!
         modelTextField.text = object.model!
         statusTextField.text = object.status!
-        yearTextField.text = "\(object.year!)"
-        kmTextField.text = "\(object.km!)"
+        yearTextField.text = "\(object.seats!)"
+        kmTextField.text = "\(object.rides!)"
     }
 
     private func enableTextFields() {

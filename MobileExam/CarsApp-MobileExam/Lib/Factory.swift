@@ -45,25 +45,31 @@ class Factory {
             objectStatus = jsonStatus
         }
 
-        if let jsonYear = json["year"] as? Int {
-            objectYear = jsonYear
-        } else if let jsonYear = json["year"] as? String {
-            objectYear = Int(jsonYear)
+        if let jsonSeats = json["seats"] as? Int {
+            objectYear = jsonSeats
+        } else if let jsonSeats = json["seats"] as? String {
+            objectYear = Int(jsonSeats)
         }
 
-        if let jsonKm = json["km"] as? Int {
-            objectKm = jsonKm
-        } else if let jsonKm = json["km"] as?  String {
-            objectKm = Int(jsonKm)
+        if let jsonRides = json["rides"] as? Int {
+            objectKm = jsonRides
+        } else if let jsonRides = json["rides"] as?  String {
+            objectKm = Int(jsonRides)
         }
+        
+        if objectKm == nil {
+            objectKm = 0
+        }
+        
+        print("Factory: number of rides is: \(objectKm)")
 
         let object = Object(
             id: objectID,
             name: objectName,
             model: objectModel,
             status: objectStatus,
-            year: objectYear,
-            km: objectKm
+            seats: objectYear,
+            rides: objectKm
         )
 
         return object
