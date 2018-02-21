@@ -1,6 +1,6 @@
 //
 //  CustomObjectTableViewController.swift
-//  CarsApp-MobileExam
+//  boatsApp-MobileExam
 //
 //  Created by Bogdan Pintilei on 2/20/18.
 //  Copyright © 2018 Bogdan. All rights reserved.
@@ -13,7 +13,7 @@ class CustomObjectTableViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     static var retryInternetConnection: UIBarButtonItem!
     
-    var cars = [Object]()
+    var boats = [Object]()
     var selectedObject = Object()
 
     override func viewDidLoad() {
@@ -26,10 +26,13 @@ class CustomObjectTableViewController: UIViewController {
     
     private func getObjects() {
         LoadingView.startLoadingAnimation()
-        APIClient.getObjects { (cars) -> Void in
+        APIClient.getObjects { (boats) -> Void in
             LoadingView.stopLoadingAnimation()
-            self.cars = cars
+            self.boats = boats
             self.tableView.reloadData()
+            if boats.isEmpty {
+                self.showAlert("Something went wrong!")
+            }
         }
     }
 
@@ -50,18 +53,18 @@ extension CustomObjectTableViewController: UITableViewDelegate, UITableViewDataS
     // MARK: Table View Delegate & Data Source
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cars.count
+        return boats.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCellID", for: indexPath) as! CustomTableViewCell
-        cell.object = cars[indexPath.row]
+        cell.object = boats[indexPath.row]
 
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedObject = cars[indexPath.row]
+        selectedObject = boats[indexPath.row]
         performSegue(withIdentifier: "ShowObjectDetailsSegueID", sender: nil)
     }
 

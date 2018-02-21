@@ -42,6 +42,9 @@ class ManagerObjectViewController: UIViewController {
             print(cars.count)
             self.tableView.reloadData()
             self.cars = Helper.sortObjects(objects: cars)
+            if cars.isEmpty {
+                self.showAlert("Something went wrong!")
+            }
         }
     }
     

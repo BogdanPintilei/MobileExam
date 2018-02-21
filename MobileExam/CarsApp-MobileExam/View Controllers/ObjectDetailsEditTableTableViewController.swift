@@ -93,6 +93,7 @@ class ObjectDetailsEditTableTableViewController: UITableViewController {
                 print("POST /modify 200")
             } else {
                 print("POST /modify 404")
+                self.showAlert("Something went wrong!")
             }
         }
     }
@@ -115,7 +116,7 @@ class ObjectDetailsEditTableTableViewController: UITableViewController {
                 print("POST /modify 200")
             } else {
                 print("POST /modify 404")
-                
+                self.showAlert("Something went wrong!")
             }
         }
 
