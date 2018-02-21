@@ -55,7 +55,7 @@ class APIClient {
     }
     
     private static func stagingUrl() -> String {
-        return "http://172.20.10.2:4022/"
+        return "http://172.30.115.216:4022/"
     }
     
 }

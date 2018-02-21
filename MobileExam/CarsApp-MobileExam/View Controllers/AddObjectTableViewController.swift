@@ -14,6 +14,8 @@ class AddObjectTableViewController: UITableViewController {
     @IBOutlet var modelTextField: UITextField!
     @IBOutlet var yearTextField: UITextField!
     
+    var boats = [Object]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         enableTextFields()
@@ -41,8 +43,29 @@ class AddObjectTableViewController: UITableViewController {
                 self.dismiss(animated: true, completion: nil)
             } else {
                 print("POST /modify 404")
-                self.showAlert("Please fill in all the fields and try again!")
+                if ConnectivityManager.shared().isConnectedToInternet() {
+                     self.showAlert("Something went wrong, please try again!")
+                } else {
+                    self.getObjects()
+
+                }
             }
+        }
+    }
+    
+    private func getObjects() {
+        let object = Object(
+            name: nameTextField.text,
+            model: modelTextField.text,
+            seats: Int(yearTextField.text!)
+        )
+        LoadingView.startLoadingAnimation()
+        APIClient.getObjects { (boats) -> Void in
+            LoadingView.stopLoadingAnimation()
+            self.boats = boats
+            self.boats.append(object)
+            Object.insertItems(objectList: self.boats)
+            self.dismiss(animated: true, completion: nil)
         }
     }
     private func enableTextFields() {
